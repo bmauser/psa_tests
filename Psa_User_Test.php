@@ -8,8 +8,6 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	protected function setUp(){
 
-		Psa_Registry::get_instance()->psa_disable_hooks = true;
-
 		run_sql_file();
 	}
 
@@ -233,119 +231,6 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 		$groups = $user->get_groups();
 
 		$this->assertEquals('psa', $groups[1]);
-	}
-
-
-	/**
-	 * @expectedException Psa_User_Exception
-	 */
-	public function testHookBeforeUserCreate(){
-
-		// enable hooks
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-		$user_name = 'testHookBeforeUserCreate';
-
-		$user = new Psa_User('new');
-		$user->username = $user_name;
-		$user->password = 'TestPass';
-		try{
-			$user->save();
-		}catch(Exception $e){
-			$this->assertEquals('Hook_Before_User_Create', $e->getMessage());
-		}
-
-		$user = new Psa_User($user_name);
-		$user->restore();
-	}
-
-
-	public function testHookAfterUserCreate(){
-
-		// enable hooks
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-		$user_name = 'testHookAfterUserCreate';
-
-		// remove Before_Group_Create hook
-		unset(Psa_Files::get_instance()->files_data['hooks']['Psa_Hook_Before_User_Create']['Hook_Before_User_Create']);
-
-		$user = new Psa_User('new');
-		$user->username = $user_name;
-		$user->password = 'TestPass';
-		try{
-			$user->save();
-		}catch(Exception $e){
-			$this->assertEquals('Hook_After_User_Create', $e->getMessage());
-		}
-
-		$user = new Psa_User($user_name);
-		$user->restore();
-	}
-
-
-	public function testHookBeforeUserDelete(){
-
-		// enable hooks
-		$user_name = 'testHookBeforeUserDelete';
-
-		$user = new Psa_User('new');
-		$user->username = $user_name;
-		$user->password = 'TestPass';
-		$user->save();
-
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-
-		try{
-			psa_delete_user($user->id);
-		}catch(Exception $e){
-			$this->assertEquals('Hook_Before_User_Delete', $e->getMessage());
-		}
-
-		$user = new Psa_User($user_name);
-		$user->restore();
-		$this->assertEquals(2, $user->id);
-	}
-
-
-	/**
-	 * @expectedException Psa_User_Exception
-	 */
-	public function testHookAfterUserDelete(){
-
-		// enable hooks
-		$user_name = 'testHookAfterUserDelete';
-
-		$user = new Psa_User('new');
-		$user->username = $user_name;
-		$user->password = 'TestPass';
-		$user->save();
-
-		// enable hooks
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-
-		// remove Before_Group_Create hook
-		unset(Psa_Files::get_instance()->files_data['hooks']['Psa_Hook_Before_User_Delete']['Hook_Before_User_Delete']);
-
-		try{
-			psa_delete_user($user->id);
-		}catch(Exception $e){
-			$this->assertEquals('Hook_After_User_Delete', $e->getMessage());
-		}
-
-		$user = new Psa_User($user_name);
-		$user->restore();
-	}
-
-
-	public function testHookAfterUserAuthorize(){
-
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-
-		$user = new Psa_User('psa');
-		try{
-			$user->authorize('psa');
-		}catch(Exception $e){
-			$this->assertEquals('Hook_After_User_Authorize', $e->getMessage());
-		}
 	}
 
 

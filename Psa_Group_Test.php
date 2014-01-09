@@ -8,8 +8,6 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 	protected function setUp(){
 
-		Psa_Registry::get_instance()->psa_disable_hooks = true;
-
 		run_sql_file();
 	}
 
@@ -198,97 +196,6 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(-1, $group->remove_user(123));
 	}
 
-
-	/**
-	 * @expectedException Psa_Group_Exception
-	 */
-	public function testHookBeforeGroupCreate(){
-
-		// enable hooks
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-		$group_name = 'testHookBeforeGroupCreate';
-
-		$group = new Psa_Group('new');
-		$group->name = $group_name;
-		try{
-			$group->save();
-		}catch(Exception $e){
-			$this->assertEquals('Hook_Before_Group_Create', $e->getMessage());
-		}
-
-		$group = new Psa_Group($group_name);
-		$group->restore();
-	}
-
-
-	public function testHookAfterGroupCreate(){
-
-		// enable hooks
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-		$group_name = 'testHookAfterGroupCreate';
-
-		// remove Before_Group_Create hook
-		unset(Psa_Files::get_instance()->files_data['hooks']['Psa_Hook_Before_Group_Create']['Hook_Before_Group_Create']);
-
-		$group = new Psa_Group('new');
-		$group->name = $group_name;
-		try{
-			$group->save();
-		}catch(Exception $e){
-			$this->assertEquals('Hook_After_Group_Create', $e->getMessage());
-		}
-
-		$group = new Psa_Group($group_name);
-		$group->restore();
-		$this->assertEquals(2, $group->id);
-	}
-
-
-	public function testHookBeforeGroupDelete(){
-
-		// enable hooks
-		$group_name = 'testHookBeforeGroupDelete';
-
-		$group = new Psa_Group('new');
-		$group->name = $group_name;
-		$group->save();
-
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-
-		try{
-			psa_delete_group($group->id);
-		}catch(Exception $e){
-			$this->assertEquals('Hook_Before_Group_Delete', $e->getMessage());
-		}
-
-		$group = new Psa_Group($group_name);
-		$group->restore();
-		$this->assertEquals(2, $group->id);
-	}
-
-
-	/**
-	 * @expectedException Psa_Group_Exception
-	 */
-	public function testHookAfterGroupDelete(){
-
-		// enable hooks
-		$group_name = 'testHookAfterGroupDelete';
-
-		Psa_Registry::get_instance()->psa_disable_hooks = false;
-
-		// remove Before_Group_Create hook
-		unset(Psa_Files::get_instance()->files_data['hooks']['Psa_Hook_Before_Group_Delete']['Hook_Before_Group_Delete']);
-
-		try{
-			psa_delete_group(1);
-		}catch(Exception $e){
-			$this->assertEquals('Hook_After_Group_Delete', $e->getMessage());
-		}
-
-		$group = new Psa_Group($group_name);
-		$group->restore();
-	}
 
 	public function testExtend(){
 

@@ -1,7 +1,7 @@
 <?php
 
 $TCFG['use_db'] = 'mysql';
-//$TCFG['use_db'] = 'pgsql'; // uncoment to use pgsql database
+//$TCFG['use_db'] = 'pgsql'; // Uncoment to use pgsql database. Also change connection settings in psa/config_override.php
 
 $TCFG['psa_dir'] = 'W:/WEBROOT/psa1/skeleton_application/app/psa';
 
@@ -44,6 +44,7 @@ Psa_Registry::get_instance()->psa_database = new Psa_PDO();
 
 // test hooks
 Psa_Registry::get_instance()->PSA_CFG['folders']['hook_autoload'][] = '../../../tests/test_hooks';
+Psa_Registry::get_instance()->PSA_CFG['folders']['hook_def'][] = '../../../tests/test_hooks/def';
 
 // register files
 $files_data = Psa_Files::get_instance()->register();
