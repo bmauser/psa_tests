@@ -46,11 +46,13 @@ Psa_Registry::get_instance()->psa_database = new Psa_PDO();
 Psa_Registry::get_instance()->PSA_CFG['folders']['hook_autoload'][] = '../../../tests/test_hooks';
 Psa_Registry::get_instance()->PSA_CFG['folders']['hook_def'][] = '../../../tests/test_hooks/def';
 
-// register files
+// register and save files for autoloader
 $files_data = Psa_Files::get_instance()->register();
-
-// save to file
 Psa_Files::get_instance()->save($files_data);
+
+// flag that this is test mode
+if(!defined('PSA_TEST'))
+	define('PSA_TEST', 1);
 
 echo "\nPSA tests with {$TCFG['use_db']} database.\n\n";
 
