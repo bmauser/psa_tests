@@ -226,7 +226,7 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 				return true;
 			return false;
 		}
-		
+
 		$this->assertEquals(true, $v->check_callback('test_callback', 1));
 		$this->assertEquals(false, $v->check_callback('test_callback', -1));
 	}
@@ -252,14 +252,14 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(false, $v->check_identical('0', 'a'));
 		$this->assertEquals(false, $v->check_identical(0, 'a'));
 	}
-	
+
 	// public function testIP6(){
 	// }
 	public function testRequired(){
 
 		$v = new Psa_Validator();
 		$v->required('123', 'between', 2, 500);
-		
+
 		try{
 			$v->required('', 'between', 2, 500);
 		}catch(Psa_Validation_Exception $e){
@@ -280,17 +280,41 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 	public function testCustomMessges(){
 
 		$v = new Psa_Validator();
-		
+
 		try{
 			$v->optional(123, 'email', 'Email is invalid --');
 		}catch(Psa_Validation_Exception $e){
 			$this->assertEquals('Email is invalid --', $e->getMessage());
 		}
-		
+
 		try{
 			$v->required('123', 'between', 2, 500, 'aaa');
 		}catch(Psa_Validation_Exception $e){
 			$this->assertEquals('aaa', $e->getMessage());
+		}
+	}
+
+
+	public function testCustomMessgesRequired(){
+
+		$v = new Psa_Validator();
+
+		try{
+			$v->required('', 'int', 'aaa');
+		}catch(Psa_Validation_Exception $e){
+			$this->assertEquals('int value is required. aaa', $e->getMessage());
+		}
+
+		try{
+			$v->required('', 'int', 'aaa "%v" bbb');
+		}catch(Psa_Validation_Exception $e){
+			$this->assertEquals('int value is required. aaa "" bbb', $e->getMessage());
+		}
+
+		try{
+			$v->required('', 'int');
+		}catch(Psa_Validation_Exception $e){
+			$this->assertEquals('int value is required.', $e->getMessage());
 		}
 	}
 
@@ -303,7 +327,7 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		}catch(Psa_Validation_Exception $e){
 			$this->assertEquals('501 is not in between 2 and 500', $e->getMessage());
 		}
-		
+
 		try{
 			$v->required(array(2, 5, 8, 'asdasdasd'), 'int_array', 'zzz');
 		}catch(Psa_Validation_Exception $e){
@@ -315,12 +339,12 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 	public function testNoExceptions(){
 
 		$v = new Psa_Validator(true);
-		
+
 		$v->required(array(2, 5, 8, 501), 'between_array', 2, 500);
 		$v->required(array(2, 5, 8, 'asdasdasd'), 'int_array', 'zzz');
-		
+
 		$errors = $v->get_errors();
-		
+
 		$this->assertEquals(501, $errors[0]['value']);
 		$this->assertEquals('asdasdasd', $errors[1]['value']);
 	}
