@@ -302,19 +302,19 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		try{
 			$v->required('', 'int', 'aaa');
 		}catch(Psa_Validation_Exception $e){
-			$this->assertEquals('int value is required. aaa', $e->getMessage());
+			$this->assertEquals('Value for int is required. aaa', $e->getMessage());
 		}
 
 		try{
 			$v->required('', 'int', 'aaa "%v" bbb');
 		}catch(Psa_Validation_Exception $e){
-			$this->assertEquals('int value is required. aaa "" bbb', $e->getMessage());
+			$this->assertEquals('Value for int is required. aaa "" bbb', $e->getMessage());
 		}
 
 		try{
 			$v->required('', 'int');
 		}catch(Psa_Validation_Exception $e){
-			$this->assertEquals('int value is required.', $e->getMessage());
+			$this->assertEquals('Value for int is required.', $e->getMessage());
 		}
 	}
 
