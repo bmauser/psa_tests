@@ -348,4 +348,25 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(501, $errors[0]['value']);
 		$this->assertEquals('asdasdasd', $errors[1]['value']);
 	}
+
+
+	public function testInstanceof(){
+
+		$v = new Psa_Validator();
+
+		$a = new stdClass();
+
+		try{
+			$v->required($a, 'instanceof', 'aaa');
+		}catch(Psa_Validation_Exception $e){
+			$this->assertEquals('Value is not an instance of aaa', $e->getMessage());
+		}
+
+		$v->required($a, 'instanceof', 'stdClass');
+
+		$u = new Psa_User(123);
+		$uu = new Psa_User(456);
+		$v->required($u, 'instanceof', 'Psa_User');
+		$v->required($u, 'instanceof', $uu);
+	}
 }
