@@ -33,6 +33,7 @@ include PSA_BASE_DIR . '/lib/Psa_Files.php';
 include PSA_BASE_DIR . '/lib/Psa_Registry.php';
 include PSA_BASE_DIR . '/lib/functions.php';
 
+
 // register psa_autoload() function as __autoload() implementation
 spl_autoload_register('psa_autoload');
 
@@ -42,19 +43,24 @@ Psa_Registry::get_instance()->PSA_CFG = $PSA_CFG;
 // database connection wrapper object
 Psa_Registry::get_instance()->psa_database = new Psa_PDO();
 
+
 // test hooks
 Psa_Registry::get_instance()->PSA_CFG['folders']['hook_autoload'][] = '../../../tests/test_hooks';
 Psa_Registry::get_instance()->PSA_CFG['folders']['hook_def'][] = '../../../tests/test_hooks/def';
+
 
 // register and save files for autoloader
 $files_data = Psa_Files::get_instance()->register();
 Psa_Files::get_instance()->save($files_data);
 
+
 // flag that this is test mode
 if(!defined('PSA_TEST'))
 	define('PSA_TEST', 1);
 
+
 echo "\nPSA tests with {$TCFG['use_db']} database.\n\n";
+
 
 /**
  * Executes SQL file.
