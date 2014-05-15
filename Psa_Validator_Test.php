@@ -219,16 +219,19 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 
 		$v = new Psa_Validator();
 
+		$this->assertEquals(true, $v->check_callback(1, 'test_callback'));
+		$this->assertEquals(false, $v->check_callback(-1, 'test_callback'));
 
-		function test_callback($a){
+		$temp = test_callback(1);
 
-			if($a > 0)
-				return true;
-			return false;
+		$v->required(1, 'callback', 'test_callback');
+
+		try{
+			$v->required(-1, 'callback', 'test_callback', 'Custom message');
 		}
-
-		$this->assertEquals(true, $v->check_callback('test_callback', 1));
-		$this->assertEquals(false, $v->check_callback('test_callback', -1));
+		catch(Psa_Validation_Exception $e){
+			$this->assertEquals('Custom message', $e->getMessage());
+		}
 	}
 
 
@@ -369,4 +372,11 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$v->required($u, 'instanceof', 'Psa_User');
 		$v->required($u, 'instanceof', $uu);
 	}
+}
+
+function test_callback($a){
+
+	if($a > 0)
+		return true;
+	return false;
 }
