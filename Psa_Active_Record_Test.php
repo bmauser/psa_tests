@@ -77,6 +77,31 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 		$data = $ar->restore_sess();
 		$this->assertEquals('psa', $data['username']);
 	}
+
+
+	public function testSelectColumnSql(){
+
+		$ar = new ar_example();
+		$ar->username = 'testtest';
+		$ar->save_db();
+
+		$ar->set_select_column_sql();
+		$ar->restore_db();
+
+		$this->assertEquals('testtest************', $ar->username);
+	}
+
+
+	public function testInsertUpdateColumnSql(){
+
+		$ar = new ar_example();
+		$ar->username = 'testtest';
+		$ar->set_insert_update_column_sql();
+		$ar->save_db();
+
+		$ar->restore_db();
+		$this->assertEquals('testtest************', $ar->username);
+	}
 }
 
 
@@ -93,6 +118,13 @@ class ar_example extends Psa_Active_Record{
 		parent::__construct('psa_user', 'id', $this->id, $table_columns, 'psa_user_id_seq');
 	}
 
+	public function set_select_column_sql(){
+		$this->psa_select_column_sql['username'] = "RPAD(username, 20, '*') AS username";
+	}
+
+	public function set_insert_update_column_sql(){
+		$this->psa_insert_update_column_sql['username'] = "RPAD(?, 20, '*')";
+	}
 
 	public function save_db(){
 		return $this->save_to_database();
