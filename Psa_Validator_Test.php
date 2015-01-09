@@ -90,6 +90,7 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(true, $v->check_email('a@u.com'));
 		$this->assertEquals(false, $v->check_email('asdasdh asd@asdasdasd.comrerv'));
 		$this->assertEquals(false, $v->check_email(''));
+		$this->assertEquals(true, $v->check_email('sdfsdfsdf.dsfsdf@eeee.longtldlongtldlongtldlongtld'));
 	}
 
 
@@ -193,6 +194,7 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(false, $v->check_hostname('asasd.asfasd.asfsdf_'));
 		$this->assertEquals(false, $v->check_hostname(''));
 		$this->assertEquals(false, $v->check_hostname('asasd.asfa--sd.asfsdf_'));
+		$this->assertEquals(true, $v->check_hostname('asasd.asfasd.longtldlongtldlongtld'));
 	}
 
 
@@ -212,6 +214,7 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(true, $v->check_url('http://www.google.hr/search?num=100&hl=hr&newwindow=1&client=firefox-a&rls=org.mozilla%3Aen-US%3Aofficial&hs=Qjt&q=aaa&btnG=Tra%C5%BEi&meta='));
 		$this->assertEquals(false, $v->check_url('sdfcsfsdffd'));
 		$this->assertEquals(false, $v->check_url('http://google.com.'));
+		$this->assertEquals(true, $v->check_url('http://aaaa.longtldlongtldlongtld'));
 	}
 
 
