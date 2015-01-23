@@ -102,6 +102,19 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 		$ar->restore_db();
 		$this->assertEquals('testtest************', $ar->username);
 	}
+
+
+	public function testInsertUpdateColumnNoValue(){
+
+		$ar = new ar_example();
+		$ar->set_insert_update_column_no_value();
+		$ar->save_db();
+
+		$ar->restore_db();
+		$this->assertEquals('TestTest', $ar->username);
+	}
+
+
 }
 
 
@@ -119,11 +132,15 @@ class ar_example extends Psa_Active_Record{
 	}
 
 	public function set_select_column_sql(){
-		$this->psa_select_column_sql['username'] = "RPAD(username, 20, '*') AS username";
+		$this->set_column_sql('username', "RPAD(username, 20, '*') AS username");
 	}
 
 	public function set_insert_update_column_sql(){
-		$this->psa_insert_update_column_sql['username'] = "RPAD(?, 20, '*')";
+		$this->set_column_sql('username', null, "RPAD(?, 20, '*')");
+	}
+
+	public function set_insert_update_column_no_value(){
+		$this->set_column_sql('username', null, "CONCAT('Test','Test')", true);
 	}
 
 	public function save_db(){
