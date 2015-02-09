@@ -1,7 +1,7 @@
 <?php
 
 include_once 'psa_init.php';
-
+include_once PSA_BASE_DIR . '/wri/getfunctions.php'; 
 
 class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 
@@ -31,12 +31,11 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 		
 		PSA_CFG()['test4']['test4'] = 777;
 		$this->assertEquals(PSA_CFG('test4.test4'), 777);
-		
 	}
 	
 	
 	/**
-	 * @expectedException PSA_CFG_Exception
+	 * @expectedException PSA_Exception
 	 */
 	public function testPSA_CFG2(){
 	
@@ -66,8 +65,14 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(PSA_CFG('test.bb.oo->gg'), 3);
 		$this->assertEquals(PSA_CFG('test.bb.oo->uu'), 4);
 		$this->assertEquals(PSA_CFG('test.bb.oo->pp.ee'), 5);
-		$this->assertEquals(PSA_CFG('test.qq->ww->uu'), 6);		
+		$this->assertEquals(PSA_CFG('test.qq->ww->uu'), 6);
+		
+		$this->assertEquals(PSA_CFG1()['aaa'], 123);
+		$this->assertEquals(PSA_CFG1('aaa'), 123);
 	}
+	
+	
+	
 
 
 }
