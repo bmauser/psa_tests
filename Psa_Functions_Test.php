@@ -72,7 +72,73 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 	}
 	
 	
+	public function testNew1(){
+	
+		bla()->aaa = 123;
+		bla()->bbb = 345;
+		
+		$o = bla();
+		
+		$this->assertEquals($o->aaa, 123);
+		$this->assertEquals($o->bbb, 345);
+		
+		bla('in1')->aaa = 11;
+		bla('in2')->aaa = 22;
+		
+		$this->assertEquals(bla('in1')->aaa, 11);
+		$this->assertEquals(isset(bla('in2')->bbb), false);
+	}
+	
+	
+	public function testNew2(){
+	
+		run_sql_file();
+		bla2('in1','psa');
+		bla2('in1')->restore();
+	}
+	
+	/**
+	 * @expectedException Psa_Exception
+	 */
+	public function testNew3(){
+	
+		run_sql_file();
+		bla2('in1','psa');
+		bla2('in1','www');
+	}
+	
+	
+	public function testNew4(){
+		prs(stdclas());
+	}
+	
 	
 
 
 }
+
+function bla2($instance_name = null){
+	
+	// no arguments for constructor
+	if(func_num_args() <= 1)
+		return psa_get_instance('Psa_User', $instance_name);
+	
+	// with constructor arguments
+	$args = func_get_args();
+	array_shift($args);
+	return call_user_func_array('psa_get_instance', array('Psa_User', $instance_name, $args));
+}
+
+
+function bla($instance_name = null){
+	// no arguments for constructor
+	if(func_num_args() <= 1)
+		return psa_get_instance('stdClass', $instance_name);
+	
+	// with constructor arguments
+	$args = func_get_args();
+	array_shift($args);
+	return call_user_func_array('psa_get_instance', array('stdClass', $instance_name, $args));
+}
+
+
