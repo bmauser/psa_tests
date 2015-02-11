@@ -14,15 +14,30 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 	public function testSave(){
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->username = 'testtest';
 		$ar->save_db();
+
+		$ar->restore_db();
+		$this->assertEquals('testtest', $ar->username);
+	}
+
+
+	public function testNew(){
+
+		$ar = new ar_example();
+		$ar->username = 'new';
+		$id = $ar->save_db();
+		$this->assertEquals(2, $id);
+
+		$ar->restore_db($id);
+		$this->assertEquals('new', $ar->username);
 	}
 
 
 	public function testLoad(){
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->restore_db();
 		$this->assertEquals('psa', $ar->username);
 	}
@@ -30,7 +45,7 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 	public function testBeforeSaveToDatabaseModifier(){
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->restore_db();
 
 		$ar->set_before_save_to_database_modifier();
@@ -42,7 +57,7 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 	public function testAfterRestoreFromDatabaseModifier(){
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 
 		$ar->set_after_restore_from_database_modifier();
 		$ar->restore_db();
@@ -58,7 +73,7 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 		$_SESSION = array();
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->restore_db();
 		$ar->save_sess();
 
@@ -70,7 +85,7 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 		$_SESSION = array();
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->restore_db();
 		$ar->save_sess();
 
@@ -81,11 +96,13 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 	public function testSelectColumnSql(){
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->username = 'testtest';
 		$ar->save_db();
 
-		$ar->set_select_column_sql();
+		$settings['select_sql'] = "RPAD(username, 20, '*') AS username";
+		$ar->set_col_settings('username', $settings);
+
 		$ar->restore_db();
 
 		$this->assertEquals('testtest************', $ar->username);
@@ -94,9 +111,12 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 	public function testInsertUpdateColumnSql(){
 
-		$ar = new ar_example();
+		$ar = new ar_example(1);
 		$ar->username = 'testtest';
-		$ar->set_insert_update_column_sql();
+
+		$settings['insert_update_sql'] = "RPAD(?, 20, '*')";
+		$ar->set_col_settings('username', $settings);
+
 		$ar->save_db();
 
 		$ar->restore_db();
@@ -104,14 +124,84 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 	}
 
 
-	public function testInsertUpdateColumnNoValue(){
+	public function testInsertUpdateColumnNoParam1(){
+
+		$ar = new ar_example(); // new row
+		$settings['insert_update_sql'] = "CONCAT('Test','Test')";
+		$settings['insert_no_params'] = true;
+		$settings['update_no_params'] = true;
+		$ar->set_col_settings('username', $settings);
+		$ar->save_db();
+		$ar->restore_db();
+		$this->assertEquals('TestTest', $ar->username);
+
+
+		$ar = new ar_example(1);
+		$settings['insert_update_sql'] = "CONCAT('Test33','Test33')";
+		$settings['insert_no_params'] = true;
+		$settings['update_no_params'] = true;
+		$ar->set_col_settings('username', $settings);
+		$ar->save_db();
+		$ar->restore_db();
+		$this->assertEquals('Test33Test33', $ar->username);
+
+
+	}
+
+
+	public function testInsertUpdateColumnNoParam2(){
 
 		$ar = new ar_example();
-		$ar->set_insert_update_column_no_value();
+		$settings['insert_update_sql'] = "CONCAT('Test8','Test8')";
+		$settings['insert_no_params'] = true;
+		$settings['update_no_params'] = true;
+		$ar->set_col_settings('username', $settings);
+
+		$settings['insert_update_sql'] = "22+22";
+		$settings['insert_no_params'] = true;
+		$settings['update_no_params'] = true;
+		$ar->set_col_settings('last_login', $settings);
 		$ar->save_db();
 
 		$ar->restore_db();
-		$this->assertEquals('TestTest', $ar->username);
+		$this->assertEquals('Test8Test8', $ar->username);
+		$this->assertEquals('44', $ar->last_login);
+
+		// try with different values
+		$ar->username = '1122';
+		$ar->last_login = '5555';
+		$ar->save_db();
+		$ar->restore_db();
+		$this->assertEquals('Test8Test8', $ar->username);
+		$this->assertEquals('44', $ar->last_login);
+	}
+
+
+	public function testUpdateSql(){
+
+		$ar = new ar_example();
+		$ar->username = 'newusername';
+		$settings['update_sql'] = "CONCAT('Test88','Test88')";
+		$settings['update_no_params'] = true;
+		$ar->set_col_settings('username', $settings);
+
+		$settings['update_sql'] = "55";
+		$settings['insert_sql'] = "66";
+		$settings['insert_no_params'] = true;
+		$settings['update_no_params'] = true;
+		$ar->set_col_settings('last_login', $settings);
+
+		$ar->save_db(); // insert
+
+		$ar->restore_db();
+		$this->assertEquals('newusername', $ar->username);
+		$this->assertEquals('66', $ar->last_login);
+
+		$ar->username = 'edit';
+		$ar->save_db(); // update
+		$ar->restore_db();
+		$this->assertEquals('Test88Test88', $ar->username);
+		$this->assertEquals('55', $ar->last_login);
 	}
 
 
@@ -120,27 +210,19 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 
 class ar_example extends Psa_Active_Record{
 
-	public $id = 1;
+	public $id;
 	public $username;
 	public $last_login;
 
-	public function __construct(){
+	public function __construct($row_id = null){
 
 		$table_columns = array('id', 'username', 'last_login');
 
-		parent::__construct('psa_user', 'id', $this->id, $table_columns, 'psa_user_id_seq');
+		parent::__construct('psa_user', 'id', $row_id, $table_columns, 'psa_user_id_seq');
 	}
 
-	public function set_select_column_sql(){
-		$this->set_column_sql('username', "RPAD(username, 20, '*') AS username");
-	}
-
-	public function set_insert_update_column_sql(){
-		$this->set_column_sql('username', null, "RPAD(?, 20, '*')");
-	}
-
-	public function set_insert_update_column_no_value(){
-		$this->set_column_sql('username', null, "CONCAT('Test','Test')", true);
+	public function set_col_settings($col_name, $options){
+		$this->set_column_settings($col_name, $options);
 	}
 
 	public function save_db(){

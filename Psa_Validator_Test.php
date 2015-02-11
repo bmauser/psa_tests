@@ -107,6 +107,7 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(false, $v->check_ip4('10.0.0.011'));
 		$this->assertEquals(false, $v->check_ip4('10.0.0.0xa'));
 		$this->assertEquals(false, $v->check_ip4(''));
+		$v->required('1.1.1.1', 'ip4');
 	}
 
 
@@ -339,6 +340,17 @@ class Psa_Validator_Test extends PHPUnit_Framework_TestCase{
 		}catch(Psa_Validation_Exception $e){
 			$this->assertEquals('zzz', $e->getMessage());
 		}
+
+		$v->required(array('1.1.1.1', '2.2.2.2'), 'ip4_array');
+
+		try{
+			$v->required(array(), 'id_array');
+		}catch(Psa_Validation_Exception $e){
+			;
+		}
+
+		$v->optional(array(), 'id_array');
+		$v->optional(array(), 'id');
 	}
 
 
