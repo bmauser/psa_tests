@@ -44,11 +44,6 @@ Psa_Registry::get_instance()->PSA_CFG = $PSA_CFG;
 Psa_Registry::get_instance()->psa_database = new Psa_PDO();
 
 
-// test hooks
-Psa_Registry::get_instance()->PSA_CFG['folders']['hook_autoload'][] = '../../../tests/test_hooks';
-Psa_Registry::get_instance()->PSA_CFG['folders']['hook_def'][] = '../../../tests/test_hooks/def';
-
-
 // register and save files for autoloader
 $files_data = Psa_Files::get_instance()->register();
 Psa_Files::get_instance()->save($files_data);

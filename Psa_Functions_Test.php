@@ -1,7 +1,7 @@
 <?php
 
 include_once 'psa_init.php';
-include_once PSA_BASE_DIR . '/wri/getfunctions.php'; 
+include_once PSA_BASE_DIR . '/wri/asfunctions.php'; 
 
 class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 
@@ -11,7 +11,7 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 	//	run_sql_file();
 	//}
 	
-	public function testPSA_CFG1(){
+	public function ntestPSA_CFG1(){
 
 		$cfg = PSA_CFG();
 		$this->assertArrayHasKey('logging', $cfg);
@@ -37,7 +37,7 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 	/**
 	 * @expectedException PSA_Exception
 	 */
-	public function testPSA_CFG2(){
+	public function ntestPSA_CFG2(){
 	
 		$cfg = PSA_CFG();
 		$this->assertArrayHasKey('logging', $cfg);
@@ -46,7 +46,7 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 	}
 
 
-	public function testPSA_CFG3(){
+	public function ntestPSA_CFG3(){
 
 		$arr['aaa'] = 1;
 		$arr['bb']['cc'] = 2;
@@ -107,10 +107,6 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 		bla2('in1','www');
 	}
 	
-	
-	public function testNew4(){
-		prs(stdclas());
-	}
 	
 	
 
