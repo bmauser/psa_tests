@@ -27,11 +27,12 @@ define('PSA_BASE_DIR', $TCFG['psa_dir']);
 
 // include required files
 include PSA_BASE_DIR . '/config.php';
-include PSA_BASE_DIR . '/lib/Psa_Singleton.php';
+//include PSA_BASE_DIR . '/lib/Psa_Singleton.php';
 include PSA_BASE_DIR . '/lib/Psa_Logger.php';
 include PSA_BASE_DIR . '/lib/Psa_Files.php';
 include PSA_BASE_DIR . '/lib/Psa_Registry.php';
 include PSA_BASE_DIR . '/lib/functions.php';
+include PSA_BASE_DIR . '/wri/asfunctions.php';
 
 
 // register psa_autoload() function as __autoload() implementation
@@ -39,14 +40,14 @@ spl_autoload_register('psa_autoload');
 
 
 // put PSA config array to registry
-Psa_Registry::get_instance()->PSA_CFG = $PSA_CFG;
+Reg()->PSA_CFG = $PSA_CFG;
 // database connection wrapper object
-Psa_Registry::get_instance()->psa_database = new Psa_PDO();
+Reg()->psa_database = new Psa_PDO();
 
 
 // register and save files for autoloader
-$files_data = Psa_Files::get_instance()->register();
-Psa_Files::get_instance()->save($files_data);
+//$files_data = Files()->register();
+//Files()->save($files_data);
 
 
 // flag that this is test mode

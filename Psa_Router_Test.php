@@ -33,15 +33,15 @@ class Psa_Router_Test extends PHPUnit_Framework_TestCase{
 		$url_arr = $r->explode_url('/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		Psa_Registry::get_instance()->basedir_web = '/aaaa/bbbb';
+		Reg()->basedir_web = '/aaaa/bbbb';
 		$url_arr = $r->explode_url('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		Psa_Registry::get_instance()->basedir_web = 'aaaa/bbbb';
+		Reg()->basedir_web = 'aaaa/bbbb';
 		$url_arr = $r->explode_url('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		Psa_Registry::get_instance()->basedir_web = '/aaaa/bbbb/';
+		Reg()->basedir_web = '/aaaa/bbbb/';
 		$url_arr = $r->explode_url('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
@@ -83,7 +83,7 @@ class Psa_Router_Test extends PHPUnit_Framework_TestCase{
 
 	public function testDispach(){
 
-		Psa_Registry::get_instance()->basedir_web = '';
+		Reg()->basedir_web = '';
 
 		$r = new Psa_Router();
 		try{
