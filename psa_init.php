@@ -27,7 +27,7 @@ define('PSA_BASE_DIR', $TCFG['psa_dir']);
 
 // include required files
 include PSA_BASE_DIR . '/config.php';
-//include PSA_BASE_DIR . '/lib/Psa_Singleton.php';
+include PSA_BASE_DIR . '/lib/Psa.php';
 include PSA_BASE_DIR . '/lib/Psa_Logger.php';
 include PSA_BASE_DIR . '/lib/Psa_Files.php';
 include PSA_BASE_DIR . '/lib/Psa_Registry.php';
