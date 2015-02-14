@@ -117,24 +117,24 @@ function bla2($instance_name = null){
 	
 	// no arguments for constructor
 	if(func_num_args() <= 1)
-		return psa_get_instance('Psa_User', $instance_name);
+		return getInstance('Psa_User', $instance_name);
 	
 	// with constructor arguments
 	$args = func_get_args();
 	array_shift($args);
-	return call_user_func_array('psa_get_instance', array('Psa_User', $instance_name, $args));
+	return call_user_func_array('getInstance', array('Psa_User', $instance_name, $args));
 }
 
 
 function bla($instance_name = null){
 	// no arguments for constructor
 	if(func_num_args() <= 1)
-		return psa_get_instance('stdClass', $instance_name);
+		return getInstance('stdClass', $instance_name);
 	
 	// with constructor arguments
 	$args = func_get_args();
 	array_shift($args);
-	return call_user_func_array('psa_get_instance', array('stdClass', $instance_name, $args));
+	return call_user_func_array('getInstance', array('stdClass', $instance_name, $args));
 }
 
 

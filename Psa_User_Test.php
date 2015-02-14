@@ -103,7 +103,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 	 */
 	public function testDeleteByID(){
 
-		psa_delete_user(1);
+		deleteUser(1);
 
 		$user = new Psa_User(1);
 		$user->restore();
@@ -115,7 +115,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 	 */
 	public function testDeleteByName(){
 
-		psa_delete_user('psa');
+		deleteUser('psa');
 
 		$user = new Psa_User(1);
 		$user->restore();
@@ -134,7 +134,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 		$user->password = 'testDeleteSeveralByID2';
 		$id = $user->save();
 
-		psa_delete_user(array('psa', 'testDeleteSeveralByID1', $id));
+		deleteUser(array('psa', 'testDeleteSeveralByID1', $id));
 
 		try{
 			$user = new Psa_User(1);
@@ -164,13 +164,13 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testDeleteUnexisting(){
 
-		$this->assertEquals(-1, psa_delete_user('xxxxxxx'));
+		$this->assertEquals(-1, deleteUser('xxxxxxx'));
 	}
 
 
 	public function testDeleteSeveralUnexisting(){
 
-		$this->assertEquals(-1, psa_delete_user(array('xxxxxxx', 123, 'psa')));
+		$this->assertEquals(-1, deleteUser(array('xxxxxxx', 123, 'psa')));
 	}
 
 
@@ -183,7 +183,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 		$user = new Psa_User(1);
 		$user->add_group(2);
 
-		$this->assertEquals(1, psa_is_user_in_group(1, 2));
+		$this->assertEquals(1, isUserInGroup(1, 2));
 	}
 
 
@@ -192,7 +192,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 		$user = new Psa_User(1);
 		$user->remove_group(1);
 
-		$this->assertEquals(0, psa_is_user_in_group(1, 1));
+		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
 
 
@@ -202,7 +202,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 		$user->restore();
 		$user->remove_group(1);
 
-		$this->assertEquals(0, psa_is_user_in_group(1, 1));
+		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
 
 

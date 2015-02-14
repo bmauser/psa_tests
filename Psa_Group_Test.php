@@ -77,7 +77,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 	 */
 	public function testDeleteByID(){
 
-		psa_delete_group(1);
+		deleteGroup(1);
 
 		$group = new Psa_Group(1);
 		$group->restore();
@@ -89,7 +89,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 	 */
 	public function testDeleteByName(){
 
-		psa_delete_group('psa');
+		deleteGroup('psa');
 
 		$group = new Psa_Group(1);
 		$group->restore();
@@ -106,7 +106,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 		$group->name = 'testDeleteSeveralByID2';
 		$id = $group->save();
 
-		psa_delete_group(array('psa', 'testDeleteSeveralByID1', $id));
+		deleteGroup(array('psa', 'testDeleteSeveralByID1', $id));
 
 		try{
 			$group = new Psa_Group(1);
@@ -136,13 +136,13 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 	public function testDeleteUnexisting(){
 
-		$this->assertEquals(-1, psa_delete_group('xxxxxxx'));
+		$this->assertEquals(-1, deleteGroup('xxxxxxx'));
 	}
 
 
 	public function testDeleteSeveralUnexisting(){
 
-		$this->assertEquals(-1, psa_delete_group(array('xxxxxxx', 123, 'psa')));
+		$this->assertEquals(-1, deleteGroup(array('xxxxxxx', 123, 'psa')));
 	}
 
 
@@ -160,11 +160,11 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 		$group = new Psa_Group(1);
 		$this->assertEquals(1, $group->remove_user(1));
-		$this->assertEquals(0, psa_is_user_in_group(1, 1));
+		$this->assertEquals(0, isUserInGroup(1, 1));
 
 		$group = new Psa_Group(1);
 		$this->assertEquals(1, $group->add_user(1));
-		$this->assertEquals(1, psa_is_user_in_group(1, 1));
+		$this->assertEquals(1, isUserInGroup(1, 1));
 	}
 
 
@@ -186,7 +186,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 		$group = new Psa_Group(1);
 		$this->assertEquals(-1, $group->remove_user(array(3, 2, 1)));
-		$this->assertEquals(0, psa_is_user_in_group(1, 1));
+		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
 
 

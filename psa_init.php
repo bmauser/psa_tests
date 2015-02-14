@@ -7,8 +7,8 @@ $TCFG['psa_dir'] = 'W:/WEBROOT/psa1/skeleton_application/app/psa';
 
 // for mysql
 $TCFG['mysql']['sql_file']['main'] = 'W:/WEBROOT/psa1/install/db_mysql.sql';
-$TCFG['mysql']['sql_file']['test1'] = 'W:/WEBROOT/psa1/tests/test1_mysql.sql';
-$TCFG['mysql']['sql_file']['test2'] = 'W:/WEBROOT/psa1/tests/test2_mysql.sql';
+$TCFG['mysql']['sql_file']['test1'] = 'W:/WEBROOT/psa1/skeleton_application/app/psa/tests/test1_mysql.sql';
+$TCFG['mysql']['sql_file']['test2'] = 'W:/WEBROOT/psa1/skeleton_application/app/psa/tests/test2_mysql.sql';
 $TCFG['mysql']['cli_command'] = 'W:/APP/xampp-portable/mysql/bin/mysql -u <USERNAME> -p<PASSWORD> -h localhost <DATABASE_NAME> < <SQL_FILE>';
 
 // for pgsql
@@ -32,17 +32,18 @@ include PSA_BASE_DIR . '/lib/Psa_Logger.php';
 include PSA_BASE_DIR . '/lib/Psa_Files.php';
 include PSA_BASE_DIR . '/lib/Psa_Registry.php';
 include PSA_BASE_DIR . '/lib/functions.php';
+include PSA_BASE_DIR . '/lib/ActiveRecord.php';
 include PSA_BASE_DIR . '/wri/asfunctions.php';
 
 
-// register psa_autoload() function as __autoload() implementation
-spl_autoload_register('psa_autoload');
+// register autoloader() function as __autoload() implementation
+spl_autoload_register('autoloader');
 
 
 // put PSA config array to registry
 Reg()->PSA_CFG = $PSA_CFG;
 // database connection wrapper object
-Reg()->psa_database = new Psa_PDO();
+Reg()->psa_database = Db();
 
 
 // register and save files for autoloader

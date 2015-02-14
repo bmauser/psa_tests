@@ -3,7 +3,7 @@
 include_once 'psa_init.php';
 
 
-class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
+class ActiveRecord_Test extends PHPUnit_Framework_TestCase{
 
 
 	protected function setUp(){
@@ -208,7 +208,7 @@ class Psa_Active_Record_Test extends PHPUnit_Framework_TestCase{
 }
 
 
-class ar_example extends Psa_Active_Record{
+class ar_example extends ActiveRecord{
 
 	public $id;
 	public $username;
@@ -222,33 +222,33 @@ class ar_example extends Psa_Active_Record{
 	}
 
 	public function set_col_settings($col_name, $options){
-		$this->set_column_settings($col_name, $options);
+		$this->setColumnSettings($col_name, $options);
 	}
 
 	public function save_db(){
-		return $this->save_to_database();
+		return $this->saveToDatabase();
 	}
 
 	public function save_sess(){
-		return $this->save_to_session();
+		return $this->saveToSession();
 	}
 
 	public function restore_db(){
-		return $this->restore_from_database();
+		return $this->restoreFromDatabase();
 	}
 
 	public function restore_sess(){
-		return $this->restore_from_session();
+		return $this->restoreFromSession();
 	}
 
 	public function set_before_save_to_database_modifier(){
-		$this->register_data_modifier('before_save_to_database', 'username',  function($username){
+		$this->registerDataModifier('before_save_to_database', 'username',  function($username){
     			return $username . 'MODIFIED_DBSAVE';
 		});
 	}
 
 	public function set_after_restore_from_database_modifier(){
-		$this->register_data_modifier('after_restore_from_database', 'username',  function($username){
+		$this->registerDataModifier('after_restore_from_database', 'username',  function($username){
 			return $username . 'MODIFIED_DBRESTORE';
 		});
 	}

@@ -3,7 +3,7 @@
 include_once 'psa_init.php';
 
 
-class Psa_PDO_Test extends PHPUnit_Framework_TestCase{
+class Db_Test extends PHPUnit_Framework_TestCase{
 
 
 	protected function setUp(){
@@ -14,14 +14,14 @@ class Psa_PDO_Test extends PHPUnit_Framework_TestCase{
 
 	//public function testContructor(){
 	//
-	//	$db = new Psa_Pdo("SELECT * FROM psa_user");
+	//	$db = new Db("SELECT * FROM psa_user");
 	//	$this->assertEquals(true, $db->result instanceof PDOStatement);
 	//}
 
 
 	public function testQuery(){
 
-		$db = new Psa_Pdo();
+		$db = new Db();
 		$q = $db->query("SELECT * FROM psa_user");
 		$this->assertEquals(true, $q);
 	}
@@ -29,28 +29,24 @@ class Psa_PDO_Test extends PHPUnit_Framework_TestCase{
 
 	public function testAffectedRows(){
 
-		$db = new Psa_Pdo();
+		$db = new Db();
 		$db->query("UPDATE psa_user SET last_login = 123 WHERE id = 1");
-		$this->assertEquals(1, $db->affected_rows());
-
-		// this works only for mysql
-		//$db->query("UPDATE psa_user SET last_login = 123 WHERE id = 1");
-		//$this->assertEquals(0, $db->affected_rows());
+		$this->assertEquals(1, $db->affectedRows());
 	}
 
 
 	public function testLastInsertID(){
 
-		$db = new Psa_Pdo();
+		$db = new Db();
 		$db->query("INSERT INTO psa_user (username, password) VALUES ('testLastInsertID','aa')");
-		$this->assertEquals(2, $db->last_insert_id('psa_user_id_seq'));
+		$this->assertEquals(2, $db->lastInsertId('psa_user_id_seq'));
 	}
 
 
 	public function testConnect(){
 
 		global $PSA_CFG;
-		$db = new Psa_Pdo();
+		$db = new Db();
 		$a = $db->connect($PSA_CFG['pdo']['dsn'], $PSA_CFG['pdo']['username'], $PSA_CFG['pdo']['password'], $PSA_CFG['pdo']['driver_options']);
 		$this->assertEquals(true, $a);
 
@@ -60,18 +56,18 @@ class Psa_PDO_Test extends PHPUnit_Framework_TestCase{
 
 	public function testFetchAll(){
 
-		$db = new Psa_Pdo();
+		$db = new Db();
 		$db->query("SELECT * FROM psa_user");
-		$all = $db->fetch_all();
+		$all = $db->fetchAll();
 		$this->assertEquals('psa', $all[0]['username']);
 	}
 
 
 	public function testFetchRow(){
 
-		$db = new Psa_Pdo();
+		$db = new Db();
 		$db->query("SELECT * FROM psa_user");
-		while($row = $db->fetch_row())
+		while($row = $db->fetchRow())
 			$this->assertEquals(1, $row['id']);
 	}
 
@@ -79,7 +75,7 @@ class Psa_PDO_Test extends PHPUnit_Framework_TestCase{
 	public function testPreparedStatements(){
 
 		global $PSA_CFG;
-		$db = new Psa_Pdo();
+		$db = new Db();
 
 		$sql = "INSERT INTO psa_user (username, password) VALUES (?, ?)";
 		$sql1 = "DELETE FROM psa_user WHERE id = ?";
@@ -91,14 +87,14 @@ class Psa_PDO_Test extends PHPUnit_Framework_TestCase{
 		$db->execute(array('testPreparedStatements2', 'pass'), $sql);
 
 		// delete row
-		$db->execute(array($db->last_insert_id('psa_user_id_seq')), $db->prepare($sql1));
+		$db->execute(array($db->lastInsertId('psa_user_id_seq')), $db->prepare($sql1));
 
 		// delete row
 		$db->execute(array(2), $sql1);
 
 		// check
 		$db->query("SELECT * FROM psa_user");
-		$users = $db->fetch_all();
+		$users = $db->fetchAll();
 		$this->assertEquals(1, count($users));
 		$this->assertEquals('psa', $users[0]['username']);
 	}
