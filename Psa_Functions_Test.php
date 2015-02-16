@@ -35,7 +35,7 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 	
 	
 	/**
-	 * @expectedException PSA_Exception
+	 * @expectedException PsaException
 	 */
 	public function ntestPSA_CFG2(){
 	
@@ -98,7 +98,7 @@ class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
 	}
 	
 	/**
-	 * @expectedException Psa_Exception
+	 * @expectedException PsaException
 	 */
 	public function testNew3(){
 	
@@ -117,12 +117,12 @@ function bla2($instance_name = null){
 	
 	// no arguments for constructor
 	if(func_num_args() <= 1)
-		return getInstance('Psa_User', $instance_name);
+		return getInstance('User', $instance_name);
 	
 	// with constructor arguments
 	$args = func_get_args();
 	array_shift($args);
-	return call_user_func_array('getInstance', array('Psa_User', $instance_name, $args));
+	return call_user_func_array('getInstance', array('User', $instance_name, $args));
 }
 
 

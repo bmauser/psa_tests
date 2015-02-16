@@ -3,7 +3,7 @@
 include_once 'psa_init.php';
 
 
-class Psa_Group_Test extends PHPUnit_Framework_TestCase{
+class Group_Test extends PHPUnit_Framework_TestCase{
 
 
 	protected function setUp(){
@@ -14,7 +14,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 	// tearDown()
 	public function testRestoreByID(){
 
-		$group = new Psa_Group('psa');
+		$group = new Group('psa');
 		$group->restore();
 		$this->assertEquals(1, $group->id);
 	}
@@ -22,7 +22,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 	public function testRestoreByName(){
 
-		$group = new Psa_Group(1);
+		$group = new Group(1);
 		$group->restore();
 		$this->assertEquals('psa', $group->name);
 	}
@@ -30,15 +30,15 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 	public function testCreate(){
 
-		$group = new Psa_Group('new');
+		$group = new Group('new');
 		$group->name = 'TestName';
 		$group->save();
 
-		$group = new Psa_Group('TestName');
+		$group = new Group('TestName');
 		$group->restore();
 		$this->assertEquals(2, $group->id);
 
-		$group = new Psa_Group(2);
+		$group = new Group(2);
 		$group->restore();
 		$this->assertEquals('TestName', $group->name);
 	}
@@ -46,11 +46,11 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 	public function testRename(){
 
-		$group = new Psa_Group(1);
+		$group = new Group(1);
 		$group->name = 'TestRename';
 		$group->save();
 
-		$group = new Psa_Group(1);
+		$group = new Group(1);
 		$group->restore();
 		$this->assertEquals('TestRename', $group->name);
 	}
@@ -58,76 +58,76 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 	public function testChangeID(){
 
-		$group = new Psa_Group('new');
+		$group = new Group('new');
 		$group->name = 'testChangeID';
 		$group->save();
 
-		$group = new Psa_Group('testChangeID');
+		$group = new Group('testChangeID');
 		$group->id = 20;
 		$group->save();
 
-		$group = new Psa_Group(20);
+		$group = new Group(20);
 		$group->restore();
 		$this->assertEquals('testChangeID', $group->name);
 	}
 
 
 	/**
-	 * @expectedException Psa_Group_Exception
+	 * @expectedException GroupException
 	 */
 	public function testDeleteByID(){
 
 		deleteGroup(1);
 
-		$group = new Psa_Group(1);
+		$group = new Group(1);
 		$group->restore();
 	}
 
 
 	/**
-	 * @expectedException Psa_Group_Exception
+	 * @expectedException GroupException
 	 */
 	public function testDeleteByName(){
 
 		deleteGroup('psa');
 
-		$group = new Psa_Group(1);
+		$group = new Group(1);
 		$group->restore();
 	}
 
 
 	public function testDeleteSeveral(){
 
-		$group = new Psa_Group('new');
+		$group = new Group('new');
 		$group->name = 'testDeleteSeveralByID1';
 		$group->save();
 
-		$group = new Psa_Group('new');
+		$group = new Group('new');
 		$group->name = 'testDeleteSeveralByID2';
 		$id = $group->save();
 
 		deleteGroup(array('psa', 'testDeleteSeveralByID1', $id));
 
 		try{
-			$group = new Psa_Group(1);
+			$group = new Group(1);
 			$group->restore();
-		}catch(Psa_Group_Exception $e){
+		}catch(GroupException $e){
 		}
 		if($group->name)
 			$this->fail('Failed delete group psa');
 
 		try{
-			$group = new Psa_Group('testDeleteSeveralByID1');
+			$group = new Group('testDeleteSeveralByID1');
 			$group->restore();
-		}catch(Psa_Group_Exception $e){
+		}catch(GroupException $e){
 		}
 		if($group->id)
 			$this->fail('Failed delete group testDeleteSeveralByID1');
 
 		try{
-			$group = new Psa_Group($id);
+			$group = new Group($id);
 			$group->restore();
-		}catch(Psa_Group_Exception $e){
+		}catch(GroupException $e){
 		}
 		if($group->name)
 			$this->fail('Failed delete group testDeleteSeveralByID2');
@@ -147,53 +147,53 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 
 
 	/**
-	 * @expectedException Psa_Group_Exception
+	 * @expectedException GroupException
 	 */
 	public function testRestoreUnexisting(){
 
-		$group = new Psa_Group(123);
+		$group = new Group(123);
 		$group->restore();
 	}
 
 
 	public function testAddRemoveUser(){
 
-		$group = new Psa_Group(1);
-		$this->assertEquals(1, $group->remove_user(1));
+		$group = new Group(1);
+		$this->assertEquals(1, $group->removeUser(1));
 		$this->assertEquals(0, isUserInGroup(1, 1));
 
-		$group = new Psa_Group(1);
-		$this->assertEquals(1, $group->add_user(1));
+		$group = new Group(1);
+		$this->assertEquals(1, $group->addUser(1));
 		$this->assertEquals(1, isUserInGroup(1, 1));
 	}
 
 
 	public function testAddUsers(){
 
-		$group = new Psa_Group(1);
-		$this->assertEquals(-1, $group->add_user(array(3, 2, 1)));
+		$group = new Group(1);
+		$this->assertEquals(-1, $group->addUser(array(3, 2, 1)));
 	}
 
 
 	public function testAddUnexistingUser(){
 
-		$group = new Psa_Group(1);
-		$this->assertEquals(-1, $group->add_user(123));
+		$group = new Group(1);
+		$this->assertEquals(-1, $group->addUser(123));
 	}
 
 
 	public function testRemoveUsers(){
 
-		$group = new Psa_Group(1);
-		$this->assertEquals(-1, $group->remove_user(array(3, 2, 1)));
+		$group = new Group(1);
+		$this->assertEquals(-1, $group->removeUser(array(3, 2, 1)));
 		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
 
 
 	public function testRemoveUnexistingUser(){
 
-		$group = new Psa_Group(1);
-		$this->assertEquals(-1, $group->remove_user(123));
+		$group = new Group(1);
+		$this->assertEquals(-1, $group->removeUser(123));
 	}
 
 
@@ -218,7 +218,7 @@ class Psa_Group_Test extends PHPUnit_Framework_TestCase{
 }
 
 
-class TestGroup extends Psa_Group{
+class TestGroup extends Group{
 
 
 	public function __construct($group_id_or_groupname){

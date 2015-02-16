@@ -3,80 +3,80 @@
 include_once 'psa_init.php';
 
 
-class Psa_Router_Test extends PHPUnit_Framework_TestCase{
+class Router_Test extends PHPUnit_Framework_TestCase{
 
 
 	public function testExplodeUrl(){
 
-		$r = new Psa_Router();
+		$r = new Router();
 
 		$exp[] = 'mycontroller';
 		$exp[] = 'mymethod';
 		$exp[] = 'abc';
 		$exp[] = '123';
 
-		$url_arr = $r->explode_url('/mycontroller/mymethod/abc/123/');
+		$url_arr = $r->explodeUrl('/mycontroller/mymethod/abc/123/');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('mycontroller/mymethod/abc/123/');
+		$url_arr = $r->explodeUrl('mycontroller/mymethod/abc/123/');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('mycontroller/mymethod/abc/123');
+		$url_arr = $r->explodeUrl('mycontroller/mymethod/abc/123');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('  /mycontroller/mymethod/abc/123');
+		$url_arr = $r->explodeUrl('  /mycontroller/mymethod/abc/123');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('  /mycontroller/mymethod/abc/123    ');
+		$url_arr = $r->explodeUrl('  /mycontroller/mymethod/abc/123    ');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeUrl('/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		Reg()->basedir_web = '/aaaa/bbbb';
-		$url_arr = $r->explode_url('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeUrl('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		Reg()->basedir_web = 'aaaa/bbbb';
-		$url_arr = $r->explode_url('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeUrl('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		Reg()->basedir_web = '/aaaa/bbbb/';
-		$url_arr = $r->explode_url('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeUrl('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		$exp = array();
 
-		$url_arr = $r->explode_url('');
+		$url_arr = $r->explodeUrl('');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('     ');
+		$url_arr = $r->explodeUrl('     ');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explode_url('/');
+		$url_arr = $r->explodeUrl('/');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 	}
 
 
 	public function testGetDispatchData(){
 
-		$r = new Psa_Router();
+		$r = new Router();
 
 		$exp['controller'] = 'Mycontroller_Controller';
 		$exp['action'] = 'mymethod_action';
 		$exp['arguments'] = array('abc', '123');
 
-		$dt = $r->get_dispatch_data('/mycontroller/mymethod/abc/123/');
+		$dt = $r->getDispatchData('/mycontroller/mymethod/abc/123/');
 		$this->assertEquals(json_encode($exp), json_encode($dt));
 
 		$exp['controller'] = 'Default_Controller';
 		$exp['action'] = 'default_action';
 		$exp['arguments'] = array();
 
-		$dt = $r->get_dispatch_data('');
+		$dt = $r->getDispatchData('');
 		$this->assertEquals(json_encode($exp), json_encode($dt));
 
-		$dt = $r->get_dispatch_data('/');
+		$dt = $r->getDispatchData('/');
 		$this->assertEquals(json_encode($exp), json_encode($dt));
 	}
 
@@ -85,7 +85,7 @@ class Psa_Router_Test extends PHPUnit_Framework_TestCase{
 
 		Reg()->basedir_web = '';
 
-		$r = new Psa_Router();
+		$r = new Router();
 		try{
 			$r->dispach('TestClass', 'test_method', array('1234'));
 		}catch(Exception $e){
@@ -106,7 +106,7 @@ class Psa_Router_Test extends PHPUnit_Framework_TestCase{
 
 	public function testDispachUnexising(){
 
-		$r = new Psa_Router();
+		$r = new Router();
 
 		// unexisting method
 		try{

@@ -3,7 +3,7 @@
 include_once 'psa_init.php';
 
 
-class Psa_User_Test extends PHPUnit_Framework_TestCase{
+class User_Test extends PHPUnit_Framework_TestCase{
 
 
 	protected function setUp(){
@@ -13,24 +13,24 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 
 	/**
-	 * @expectedException Psa_User_Exception
+	 * @expectedException UserException
 	 */
 	public function testUnexisting(){
 
-		$user = new Psa_User('unexisting');
+		$user = new User('unexisting');
 		$user->restore();
 	}
 
 
 	public function testAuthorizeId(){
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->restore('id');
 		$this->assertEquals('psa', $user->username);
 
 		unset($user);
 
-		$user = new Psa_User('1');
+		$user = new User('1');
 		$user->restore('id');
 		$this->assertEquals('psa', $user->username);
 	}
@@ -38,7 +38,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testAuthorizeUsername(){
 
-		$user = new Psa_User('psa');
+		$user = new User('psa');
 		$user->restore('username');
 		$this->assertEquals(1, $user->id);
 	}
@@ -46,7 +46,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testAuthorizeUsernamePass(){
 
-		$user = new Psa_User('psa');
+		$user = new User('psa');
 		$user->authorize('psa');
 		$this->assertEquals(1, $user->id);
 	}
@@ -54,16 +54,16 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testCreate(){
 
-		$user = new Psa_User('new');
+		$user = new User('new');
 		$user->username = 'TestUsername';
 		$user->password = 'TestPass';
 		$user->save();
 
-		$user = new Psa_User(2);
+		$user = new User(2);
 		$user->restore();
 		$this->assertEquals('TestUsername', $user->username);
 
-		$user = new Psa_User('TestUsername');
+		$user = new User('TestUsername');
 		$user->authorize('TestPass');
 		$this->assertEquals(2, $user->id);
 	}
@@ -71,11 +71,11 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testChangeUsername(){
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->username = 'testChangeUsername';
 		$user->save();
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->restore();
 		$this->assertEquals('testChangeUsername', $user->username);
 	}
@@ -83,53 +83,53 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testChangeId(){
 
-		$user = new Psa_User('new');
+		$user = new User('new');
 		$user->username = 'TestUsername';
 		$user->password = 'TestPass';
 		$user->save();
 
-		$user = new Psa_User('TestUsername');
+		$user = new User('TestUsername');
 		$user->id = '10';
 		$user->save();
 
-		$user = new Psa_User(10);
+		$user = new User(10);
 		$user->restore();
 		$this->assertEquals('TestUsername', $user->username);
 	}
 
 
 	/**
-	 * @expectedException Psa_User_Exception
+	 * @expectedException UserException
 	 */
 	public function testDeleteByID(){
 
 		deleteUser(1);
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->restore();
 	}
 
 
 	/**
-	 * @expectedException Psa_User_Exception
+	 * @expectedException UserException
 	 */
 	public function testDeleteByName(){
 
 		deleteUser('psa');
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->restore();
 	}
 
 
 	public function testDeleteSeveral(){
 
-		$user = new Psa_User('new');
+		$user = new User('new');
 		$user->username = 'testDeleteSeveralByID1';
 		$user->password = 'testDeleteSeveralByID1';
 		$user->save();
 
-		$user = new Psa_User('new');
+		$user = new User('new');
 		$user->username = 'testDeleteSeveralByID2';
 		$user->password = 'testDeleteSeveralByID2';
 		$id = $user->save();
@@ -137,25 +137,25 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 		deleteUser(array('psa', 'testDeleteSeveralByID1', $id));
 
 		try{
-			$user = new Psa_User(1);
+			$user = new User(1);
 			$user->restore();
-		}catch(Psa_User_Exception $e){
+		}catch(UserException $e){
 		}
 		if($user->username)
 			$this->fail('Failed delete user psa');
 
 		try{
-			$user = new Psa_User('testDeleteSeveralByID1');
+			$user = new User('testDeleteSeveralByID1');
 			$user->restore('username');
-		}catch(Psa_User_Exception $e){
+		}catch(UserException $e){
 		}
 		if($user->id)
 			$this->fail('Failed delete group testDeleteSeveralByID1');
 
 		try{
-			$user = new Psa_User($id);
+			$user = new User($id);
 			$user->restore('id');
-		}catch(Psa_User_Exception $e){
+		}catch(UserException $e){
 		}
 		if($user->username)
 			$this->fail('Failed delete group testDeleteSeveralByID2');
@@ -176,11 +176,11 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testAddGroup(){
 
-		$group = new Psa_Group('new');
+		$group = new Group('new');
 		$group->name = 'testAddGroup';
 		$group->save();
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->add_group(2);
 
 		$this->assertEquals(1, isUserInGroup(1, 2));
@@ -189,7 +189,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testRemoveGroup(){
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->remove_group(1);
 
 		$this->assertEquals(0, isUserInGroup(1, 1));
@@ -198,7 +198,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testRemoveGroup1(){
 
-		$user = new Psa_User('psa');
+		$user = new User('psa');
 		$user->restore();
 		$user->remove_group(1);
 
@@ -208,11 +208,11 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testChangePassword(){
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->password_change('testChangePassword');
 		$this->assertEquals(1, $user->password_verify('testChangePassword'));
 
-		$user = new Psa_User('psa');
+		$user = new User('psa');
 		$user->password_change('testChangePassword1');
 		$this->assertEquals(1, $user->password_verify('testChangePassword1'));
 	}
@@ -220,14 +220,14 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 
 	public function testSave_last_login_time(){
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$user->save_last_login_time();
 	}
 
 
 	public function testGetGroups(){
 
-		$user = new Psa_User(1);
+		$user = new User(1);
 		$groups = $user->get_groups();
 
 		$this->assertEquals('psa', $groups[1]);
@@ -254,7 +254,7 @@ class Psa_User_Test extends PHPUnit_Framework_TestCase{
 }
 
 
-class TestUser extends Psa_User{
+class TestUser extends User{
 
 
 	public function __construct($user_id_or_username){
