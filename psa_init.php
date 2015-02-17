@@ -41,7 +41,7 @@ spl_autoload_register('autoloader');
 
 
 // put PSA config array to registry
-Reg()->PSA_CFG = $PSA_CFG;
+//Reg()->PSA_CFG = $PSA_CFG;
 // database connection wrapper object
 Reg()->psa_database = Db();
 

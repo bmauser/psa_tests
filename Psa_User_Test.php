@@ -181,7 +181,7 @@ class User_Test extends PHPUnit_Framework_TestCase{
 		$group->save();
 
 		$user = new User(1);
-		$user->add_group(2);
+		$user->addGroup(2);
 
 		$this->assertEquals(1, isUserInGroup(1, 2));
 	}
@@ -190,7 +190,7 @@ class User_Test extends PHPUnit_Framework_TestCase{
 	public function testRemoveGroup(){
 
 		$user = new User(1);
-		$user->remove_group(1);
+		$user->removeGroup(1);
 
 		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
@@ -200,7 +200,7 @@ class User_Test extends PHPUnit_Framework_TestCase{
 
 		$user = new User('psa');
 		$user->restore();
-		$user->remove_group(1);
+		$user->removeGroup(1);
 
 		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
@@ -209,26 +209,26 @@ class User_Test extends PHPUnit_Framework_TestCase{
 	public function testChangePassword(){
 
 		$user = new User(1);
-		$user->password_change('testChangePassword');
-		$this->assertEquals(1, $user->password_verify('testChangePassword'));
+		$user->passwordChange('testChangePassword');
+		$this->assertEquals(1, $user->passwordVerify('testChangePassword'));
 
 		$user = new User('psa');
-		$user->password_change('testChangePassword1');
-		$this->assertEquals(1, $user->password_verify('testChangePassword1'));
+		$user->passwordChange('testChangePassword1');
+		$this->assertEquals(1, $user->passwordVerify('testChangePassword1'));
 	}
 
 
-	public function testSave_last_login_time(){
+	public function testsaveLastLoginTime(){
 
 		$user = new User(1);
-		$user->save_last_login_time();
+		$user->saveLastLoginTime();
 	}
 
 
 	public function testGetGroups(){
 
 		$user = new User(1);
-		$groups = $user->get_groups();
+		$groups = $user->getGroups();
 
 		$this->assertEquals('psa', $groups[1]);
 	}

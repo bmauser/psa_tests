@@ -361,7 +361,7 @@ class Validator_Test extends PHPUnit_Framework_TestCase{
 		$v->required(array(2, 5, 8, 501), 'between_array', 2, 500);
 		$v->required(array(2, 5, 8, 'asdasdasd'), 'int_array', 'zzz');
 
-		$errors = $v->get_errors();
+		$errors = $v->getErrors();
 
 		$this->assertEquals(501, $errors[0]['value']);
 		$this->assertEquals('asdasdasd', $errors[1]['value']);
