@@ -47,7 +47,7 @@ class User_Test extends PHPUnit_Framework_TestCase{
 	public function testAuthorizeUsernamePass(){
 
 		$user = new User('psa');
-		$user->authorize('psa');
+		$user->logIn('psa');
 		$this->assertEquals(1, $user->id);
 	}
 
@@ -64,7 +64,7 @@ class User_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals('TestUsername', $user->username);
 
 		$user = new User('TestUsername');
-		$user->authorize('TestPass');
+		$user->logIn('TestPass');
 		$this->assertEquals(2, $user->id);
 	}
 
@@ -174,33 +174,33 @@ class User_Test extends PHPUnit_Framework_TestCase{
 	}
 
 
-	public function testAddGroup(){
+	public function testJoinGroup(){
 
 		$group = new Group('new');
 		$group->name = 'testAddGroup';
 		$group->save();
 
 		$user = new User(1);
-		$user->addGroup(2);
+		$user->joinGroup(2);
 
 		$this->assertEquals(1, isUserInGroup(1, 2));
 	}
 
 
-	public function testRemoveGroup(){
+	public function testLeaveGroup(){
 
 		$user = new User(1);
-		$user->removeGroup(1);
+		$user->leaveGroup(1);
 
 		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
 
 
-	public function testRemoveGroup1(){
+	public function testLeaveGroup1(){
 
 		$user = new User('psa');
 		$user->restore();
-		$user->removeGroup(1);
+		$user->leaveGroup(1);
 
 		$this->assertEquals(0, isUserInGroup(1, 1));
 	}
@@ -209,12 +209,12 @@ class User_Test extends PHPUnit_Framework_TestCase{
 	public function testChangePassword(){
 
 		$user = new User(1);
-		$user->passwordChange('testChangePassword');
-		$this->assertEquals(1, $user->passwordVerify('testChangePassword'));
+		$user->changePassword('testChangePassword');
+		$this->assertEquals(1, $user->verifyPassword('testChangePassword'));
 
 		$user = new User('psa');
-		$user->passwordChange('testChangePassword1');
-		$this->assertEquals(1, $user->passwordVerify('testChangePassword1'));
+		$user->changePassword('testChangePassword1');
+		$this->assertEquals(1, $user->verifyPassword('testChangePassword1'));
 	}
 
 

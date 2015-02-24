@@ -387,6 +387,65 @@ class Validator_Test extends PHPUnit_Framework_TestCase{
 		$v->required($u, 'instanceof', 'User');
 		$v->required($u, 'instanceof', $uu);
 	}
+	
+	
+	public function testInsertFunction(){
+	
+		$v = new Validator();
+	
+		$v->check_test123 = function($val){
+			if($val == 3)
+				return true;
+			else
+				return false;
+		};
+		
+		$this->assertEquals(true, call_user_func_array($v->check_test123, array(3)));
+		$this->assertEquals(true, $v->check_test123 instanceof Closure);
+		$this->assertEquals(true, isset($v->check_test123));
+		
+		$v->required(3, 'test123');
+	}
+	
+	
+	public function testInsertFunctionMessage(){
+	
+		$v = new Validator();
+	
+		$v->check_test22 = function($val){
+			if($val == 22)
+				return true;
+			else
+				return false;
+		};
+		
+		$v->check_test33 = function($val1, $val2){
+			if($val1 == 33 && $val2 == 44)
+				return true;
+			else
+				return false;
+		};
+		
+		$v->msg_check_test22 = '2222';
+		$v->msg_check_test33 = '3333';
+	
+		$v->required(22, 'test22');
+		$v->required(33, 'test33', 44);
+		
+		// test messages
+		try{
+			$v->required(0, 'test22');
+		}catch(ValidationException $e){
+			$this->assertEquals('2222', $e->getMessage());
+		}
+		
+		try{
+			$v->required(0, 'test33', 77);
+		}catch(ValidationException $e){
+			$this->assertEquals('3333', $e->getMessage());
+		}
+		
+	}
 }
 
 function test_callback($a){
