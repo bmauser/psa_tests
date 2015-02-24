@@ -389,7 +389,7 @@ class Validator_Test extends PHPUnit_Framework_TestCase{
 	}
 	
 	
-	public function testInsertFunction(){
+	public function testClosure(){
 	
 		$v = new Validator();
 	
@@ -405,10 +405,11 @@ class Validator_Test extends PHPUnit_Framework_TestCase{
 		$this->assertEquals(true, isset($v->check_test123));
 		
 		$v->required(3, 'test123');
+		$v->required(array(3,3,3), 'test123_array');
 	}
 	
 	
-	public function testInsertFunctionMessage(){
+	public function ttestClosureMessage(){
 	
 		$v = new Validator();
 	
@@ -444,7 +445,6 @@ class Validator_Test extends PHPUnit_Framework_TestCase{
 		}catch(ValidationException $e){
 			$this->assertEquals('3333', $e->getMessage());
 		}
-		
 	}
 }
 
