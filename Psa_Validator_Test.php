@@ -409,7 +409,7 @@ class Validator_Test extends PHPUnit_Framework_TestCase{
 	}
 	
 	
-	public function ttestClosureMessage(){
+	public function testClosureMessage(){
 	
 		$v = new Validator();
 	
