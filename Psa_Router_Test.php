@@ -6,7 +6,7 @@ include_once 'psa_init.php';
 class Router_Test extends PHPUnit_Framework_TestCase{
 
 
-	public function testExplodeUrl(){
+	public function testexplodeRequestUri(){
 
 		$r = new Router();
 
@@ -15,45 +15,45 @@ class Router_Test extends PHPUnit_Framework_TestCase{
 		$exp[] = 'abc';
 		$exp[] = '123';
 
-		$url_arr = $r->explodeUrl('/mycontroller/mymethod/abc/123/');
+		$url_arr = $r->explodeRequestUri('/mycontroller/mymethod/abc/123/');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('mycontroller/mymethod/abc/123/');
+		$url_arr = $r->explodeRequestUri('mycontroller/mymethod/abc/123/');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('mycontroller/mymethod/abc/123');
+		$url_arr = $r->explodeRequestUri('mycontroller/mymethod/abc/123');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('  /mycontroller/mymethod/abc/123');
+		$url_arr = $r->explodeRequestUri('  /mycontroller/mymethod/abc/123');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('  /mycontroller/mymethod/abc/123    ');
+		$url_arr = $r->explodeRequestUri('  /mycontroller/mymethod/abc/123    ');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeRequestUri('/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		Reg()->basedir_web = '/aaaa/bbbb';
-		$url_arr = $r->explodeUrl('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeRequestUri('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		Reg()->basedir_web = 'aaaa/bbbb';
-		$url_arr = $r->explodeUrl('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeRequestUri('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		Reg()->basedir_web = '/aaaa/bbbb/';
-		$url_arr = $r->explodeUrl('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
+		$url_arr = $r->explodeRequestUri('/aaaa/bbbb/mycontroller/mymethod/abc/123?aaaa=rrerw/ssdsd');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
 		$exp = array();
 
-		$url_arr = $r->explodeUrl('');
+		$url_arr = $r->explodeRequestUri('');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('     ');
+		$url_arr = $r->explodeRequestUri('     ');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 
-		$url_arr = $r->explodeUrl('/');
+		$url_arr = $r->explodeRequestUri('/');
 		$this->assertEquals(json_encode($exp), json_encode($url_arr));
 	}
 
@@ -66,17 +66,18 @@ class Router_Test extends PHPUnit_Framework_TestCase{
 		$exp['action'] = 'mymethod_action';
 		$exp['arguments'] = array('abc', '123');
 
-		$dt = $r->getDispatchData('/mycontroller/mymethod/abc/123/');
+		$dt = $r->getDispatchData($r->explodeRequestUri('/mycontroller/mymethod/abc/123/'));
 		$this->assertEquals(json_encode($exp), json_encode($dt));
 
+		
 		$exp['controller'] = 'Default_Controller';
 		$exp['action'] = 'default_action';
 		$exp['arguments'] = array();
 
-		$dt = $r->getDispatchData('');
+		$dt = $r->getDispatchData($r->explodeRequestUri(''));
 		$this->assertEquals(json_encode($exp), json_encode($dt));
 
-		$dt = $r->getDispatchData('/');
+		$dt = $r->getDispatchData($r->explodeRequestUri('/'));
 		$this->assertEquals(json_encode($exp), json_encode($dt));
 	}
 

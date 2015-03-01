@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
 $TCFG['use_db'] = 'mysql';
 //$TCFG['use_db'] = 'pgsql'; // Uncoment to use pgsql database. Also change connection settings in psa/config_override.php
 
@@ -28,22 +30,28 @@ define('PSA_BASE_DIR', $TCFG['psa_dir']);
 // include required files
 include PSA_BASE_DIR . '/config.php';
 include PSA_BASE_DIR . '/lib/Psa.php';
-include PSA_BASE_DIR . '/lib/Logger.php';
+//include PSA_BASE_DIR . '/lib/Logger.php';
 include PSA_BASE_DIR . '/lib/PreInit.php';
 include PSA_BASE_DIR . '/lib/Registry.php';
 include PSA_BASE_DIR . '/lib/functions.php';
 include PSA_BASE_DIR . '/lib/ActiveRecord.php';
 include PSA_BASE_DIR . '/wri/asfunctions.php';
-
+include PSA_BASE_DIR . '/lib/LoggerDbHandler.php';
 
 // register autoloader() function as __autoload() implementation
 spl_autoload_register('autoloader');
 
 
+//LoggerDbHandler::asFunction()->err('test', array('bla' => 'aaaaaaaaaaaa'));
+
+//prs(Logger()->getHandlers());
+//prs(Logger()->getProcessors());
+Logger()->err('test', array('bla' => 'aaaaaaaaaaaa'));
+
 // put PSA config array to registry
 //Reg()->PSA_CFG = $PSA_CFG;
 // database connection wrapper object
-Reg()->psa_database = Db();
+//Reg()->psa_database = Db();
 
 
 // register and save files for autoloader
