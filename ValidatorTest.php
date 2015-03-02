@@ -1,9 +1,9 @@
 <?php
 
-include_once 'psa_init.php';
+include_once __DIR__ . '/init/init.php';
 
 
-class Validator_Test extends PHPUnit_Framework_TestCase{
+class ValidatorTest extends PHPUnit_Framework_TestCase{
 
 
 	public function testBetween(){

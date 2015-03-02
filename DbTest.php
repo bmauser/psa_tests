@@ -1,9 +1,9 @@
 <?php
 
-include_once 'psa_init.php';
+include_once __DIR__ . '/init/init.php';
 
 
-class Db_Test extends PHPUnit_Framework_TestCase{
+class DbTest extends PHPUnit_Framework_TestCase{
 
 
 	protected function setUp(){
@@ -47,7 +47,7 @@ class Db_Test extends PHPUnit_Framework_TestCase{
 
 		global $PSA_CFG;
 		$db = new Db();
-		$a = $db->connect($PSA_CFG['pdo']['dsn'], $PSA_CFG['pdo']['username'], $PSA_CFG['pdo']['password'], $PSA_CFG['pdo']['driver_options']);
+		$a = $db->connect($PSA_CFG['db']['dsn'], $PSA_CFG['db']['username'], $PSA_CFG['db']['password'], $PSA_CFG['db']['driver_options']);
 		$this->assertEquals(true, $a);
 
 		$this->assertEquals(true, $db->pdo instanceof PDO);

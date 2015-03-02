@@ -1,9 +1,9 @@
 <?php
 
-include_once 'psa_init.php';
+include_once __DIR__ . '/init/init.php';
 include_once PSA_BASE_DIR . '/wri/asfunctions.php'; 
 
-class Psa_Functions_Test extends PHPUnit_Framework_TestCase{
+class FunctionsTest extends PHPUnit_Framework_TestCase{
 
 
 	//protected function setUp(){

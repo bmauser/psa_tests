@@ -1,9 +1,9 @@
 <?php
 
-include_once 'psa_init.php';
+include_once __DIR__ . '/init/init.php';
 
 
-class User_Test extends PHPUnit_Framework_TestCase{
+class UserTest extends PHPUnit_Framework_TestCase{
 
 
 	protected function setUp(){
